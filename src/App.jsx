@@ -200,7 +200,7 @@ const handleEnviar = async (e) => {
                     sexo === s ? "border-[#b116ab] bg-[#F3E5F5]" : "border-gray-200"
                   }`}
                 >
-                  <input type="radio" name="sexo" checked={sexo === s} onChange={() => setSexo(s)} className="mr-2" />
+                  <input type="radio" name="sexo" checked={sexo === s} onChange={() => setSexo(s)}  className="mr-2 accent-[#b116ab]" />
                   {s.toUpperCase()}
                 </label>
               ))}
@@ -258,7 +258,7 @@ const handleEnviar = async (e) => {
                     moneda === m ? "border-[#b116ab] bg-[#F3E5F5]" : "border-gray-200"
                   }`}
                 >
-                  <input type="radio" name="moneda" checked={moneda === m} onChange={() => setMoneda(m)} className="mr-2" />
+                  <input type="radio" name="moneda" checked={moneda === m} onChange={() => setMoneda(m)}  className="mr-2 accent-[#b116ab]" />
                   {m}
                 </label>
               ))}
