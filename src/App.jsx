@@ -266,20 +266,23 @@ const handleEnviar = async (e) => {
           </div>
 
           {/* Aporte */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">¿Cuánto podés ahorrar mensualmente?</label>
-            <input
-              type="range"
-              min={minAporte}
-              max={maxAporte}
-              value={aporte}
-              onChange={(e) => setAporte(Number(e.target.value))}
-              className="w-full accent-[#b116ab] mt-1"
-            />
-            <div className="text-right text-medium font-medium text-[#b116ab]">
-              {moneda} {aporte.toLocaleString()}
-            </div>
-          </div>
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    ¿Cuánto podés ahorrar mensualmente?
+  </label>
+  <input
+    type="range"
+    min={minAporte}
+    max={maxAporte}
+    step="5000"             // 👈 salto de 5000
+    value={aporte}
+    onChange={(e) => setAporte(Number(e.target.value))}
+    className="w-full accent-[#b116ab] mt-1"
+  />
+  <div className="text-right text-medium font-medium text-[#b116ab]">
+    {moneda} {aporte.toLocaleString()}
+  </div>
+</div>
 
           <div className="text-center mt-4">
             <button onClick={handleCalcular} className="inline-block px-6 py-2 rounded-full bg-[#b116ab] text-white font-semibold hover:brightness-95">
@@ -306,21 +309,51 @@ const handleEnviar = async (e) => {
             </div>
 
             {/* FORMULARIO */}
-            <form onSubmit={handleEnviar} className="bg-white border rounded-2xl p-4 shadow-sm">
-              <h4 className="font-semibold text-gray-700 mb-3">Solicitá tu cotización</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <input name="nombre" placeholder="Nombre y Apellido" className="border rounded-md p-2" required />
-                <input name="dni" placeholder="DNI" className="border rounded-md p-2" required />
-                <input name="fecha_nacimiento" type="date" className="border rounded-md p-2" required />
-                <input name="telefono" placeholder="Teléfono" className="border rounded-md p-2" required />
-                <input name="email" type="email" placeholder="Email" className="border rounded-md p-2" required />
-              </div>
-              <div className="mt-3 flex justify-end">
-                <button type="submit" disabled={sending} className="px-5 py-2 bg-[#b116ab] text-white rounded-full">
-                  {sending ? "Procesando..." : "Solicitar Cotización"}
-                </button>
-              </div>
-            </form>
+<form onSubmit={handleEnviar} className="bg-white border rounded-2xl p-4 shadow-sm">
+  <h4 className="font-semibold text-gray-700 mb-3">Solicitá tu cotización</h4>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Nombre y Apellido</label>
+      <input name="nombre" className="border rounded-md p-2 w-full" required />
+    </div>
+
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">DNI</label>
+      <input name="dni" className="border rounded-md p-2 w-full" required />
+    </div>
+
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
+      <input
+        name="fecha_nacimiento"
+        type="date"
+        className="border rounded-md p-2 w-full sm:w-auto text-gray-700 bg-white"
+        required
+      />
+    </div>
+
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+      <input name="telefono" className="border rounded-md p-2 w-full" required />
+    </div>
+
+    <div className="flex flex-col">
+      <label className="text-sm font-medium text-gray-700 mb-1">Email</label>
+      <input name="email" type="email" className="border rounded-md p-2 w-full" required />
+    </div>
+  </div>
+
+  <div className="mt-3 flex justify-end">
+    <button
+      type="submit"
+      disabled={sending}
+      className="px-5 py-2 bg-[#b116ab] text-white rounded-full"
+    >
+      {sending ? "Procesando..." : "Solicitar Cotización"}
+    </button>
+  </div>
+</form>
+
           </motion.div>
         )}
 
