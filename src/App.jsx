@@ -266,6 +266,7 @@ const handleEnviar = async (e) => {
           </div>
 
           {/* Aporte */}
+{/* Aporte */}
 <div className="mb-4">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     ¿Cuánto podés ahorrar mensualmente?
@@ -274,7 +275,7 @@ const handleEnviar = async (e) => {
     type="range"
     min={minAporte}
     max={maxAporte}
-    step="5000"             // 👈 salto de 5000
+    step={moneda === "ARS" ? 5000 : 10}  // 👈 paso de 5000 en pesos, 10 en dólares
     value={aporte}
     onChange={(e) => setAporte(Number(e.target.value))}
     className="w-full accent-[#b116ab] mt-1"
@@ -283,6 +284,7 @@ const handleEnviar = async (e) => {
     {moneda} {aporte.toLocaleString()}
   </div>
 </div>
+
 
           <div className="text-center mt-4">
             <button onClick={handleCalcular} className="inline-block px-6 py-2 rounded-full bg-[#b116ab] text-white font-semibold hover:brightness-95">
