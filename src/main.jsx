@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Campi from "./campi";
+import Rbgroup from "./rbgroup";
+import TriveroPablo from "./triveropablo";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -11,6 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/campi" element={<Campi />} />
+        <Route path="/rbgroup" element={<Rbgroup />} />
+        <Route path="/triveropablo" element={<TriveroPablo />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
