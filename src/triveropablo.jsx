@@ -81,7 +81,7 @@ export default function triveropablo() {
         reader.readAsDataURL(logoBlob);
       });
 
-      doc.addImage(logoBase64, "PNG", 80, 15, 48, 13);
+      doc.addImage(logoBase64, "PNG", 90, 13, 20, 20);
       doc.setFontSize(10);
       doc.text(`Fecha de emisión: ${new Date().toLocaleString()}`, 15, 40);
 
@@ -152,7 +152,7 @@ export default function triveropablo() {
     <div className="min-h-screen bg-white text-gray-800 px-4 py-8">
       <div className="max-w-xl mx-auto">
         <header className="mb-6 text-center">
-          <img src="/Trivero Pablo.png" alt="Trivero Pablo" className="mx-auto h-12 mb-3" />
+          <img src="/Trivero Pablo.png" alt="Trivero Pablo" className="mx-auto h-24 mb-3" />
         </header>
 
         <motion.section
@@ -294,14 +294,14 @@ export default function triveropablo() {
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.FV_total).toLocaleString()}
+                {moneda} {Number(resultado.FV_total).toLocaleString("US")}
               </div>
             </div>
 
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString()}
+                {moneda} {Number(resultado.rentaMensual).toLocaleString("en-US")}
               </div>
             </div>
 
