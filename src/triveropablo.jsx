@@ -81,7 +81,7 @@ export default function triveropablo() {
         reader.readAsDataURL(logoBlob);
       });
 
-      doc.addImage(logoBase64, "PNG", 90, 13, 20, 20);
+      doc.addImage(logoBase64, "PNG", 50, 9, 100, 26);
       doc.setFontSize(10);
       doc.text(`Fecha de emisión: ${new Date().toLocaleString()}`, 15, 40);
 
@@ -294,14 +294,14 @@ export default function triveropablo() {
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.FV_total).toLocaleString("US")}
+                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
               </div>
             </div>
 
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString("en-US")}
+                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
               </div>
             </div>
 
