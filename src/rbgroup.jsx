@@ -291,16 +291,16 @@ export default function RBGroup() {
         {resultado && (
           <motion.div ref={resultadoRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 space-y-4">
             <h3 className="text-lg font-semibold text-gray-700">Resultados</h3>
-            <div className="bg-[#bdcacf] p-4 rounded-lg border">
-              <div className="text-sm text-gray-600">Capital al retiro</div>
-              <div className="text-2xl font-bold text-[#184054]">
+            <div className="bg-[#184054] p-4 rounded-lg border">
+              <div className="text-sm text-white">Capital al retiro</div>
+              <div className="text-2xl font-bold text-[#ffffff]">
                 {moneda} {Number(resultado.FV_total).toLocaleString()}
               </div>
             </div>
 
-            <div className="bg-[#bdcacf] p-4 rounded-lg border">
-              <div className="text-sm text-gray-600">Renta mensual proyectada</div>
-              <div className="text-2xl font-bold text-[#184054]">
+            <div className="bg-[#184054] p-4 rounded-lg border">
+              <div className="text-sm text-white">Renta mensual proyectada</div>
+              <div className="text-2xl font-bold text-[#ffffff]">
                 {moneda} {Number(resultado.rentaMensual).toLocaleString()}
               </div>
             </div>
