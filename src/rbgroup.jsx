@@ -81,7 +81,7 @@ export default function RBGroup() {
         reader.readAsDataURL(logoBlob);
       });
 
-      doc.addImage(logoBase64, "PNG", 80, 15, 48, 13);
+      doc.addImage(logoBase64, "PNG", 65, 15, 75, 13);
       doc.setFontSize(10);
       doc.text(`Fecha de emisión: ${new Date().toLocaleString()}`, 15, 40);
 
