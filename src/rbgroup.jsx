@@ -81,7 +81,7 @@ export default function RBGroup() {
         reader.readAsDataURL(logoBlob);
       });
 
-      doc.addImage(logoBase64, "PNG", 65, 15, 75, 13);
+      doc.addImage(logoBase64, "PNG", 90, 13, 20, 20);
       doc.setFontSize(10);
       doc.text(`Fecha de emisión: ${new Date().toLocaleString()}`, 15, 40);
 
@@ -103,7 +103,7 @@ export default function RBGroup() {
           ["Renta mensual proyectada", `${data.moneda} ${data.rentaMensual.toLocaleString()}`],
         ],
         styles: { fontSize: 9, halign: "left" },
-        headStyles: { fillColor: [24, 65, 83] },
+        headStyles: { fillColor: [30, 64, 80] },
       });
 
       doc.setFontSize(8);
@@ -152,7 +152,7 @@ export default function RBGroup() {
     <div className="min-h-screen bg-white text-gray-800 px-4 py-8">
       <div className="max-w-xl mx-auto">
         <header className="mb-6 text-center">
-          <img src="/rbgroup-logo.png" alt="Rbgroup" className="mx-auto h-12 mb-3" />
+          <img src="/rbgroup-logo.png" alt="Rbgroup" className="mx-auto h-24 mb-3" />
         </header>
 
         <motion.section
@@ -160,7 +160,7 @@ export default function RBGroup() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-xl font-semibold text-[#184054] mb-3">
+          <h2 className="text-xl font-semibold text-[#1e4050] mb-3">
             ¿Querés saber cuánto podrías ahorrar con tu seguro?
           </h2>
           <p className="text-sm text-gray-700 mb-4">
@@ -182,7 +182,7 @@ export default function RBGroup() {
                 <label
                   key={s}
                   className={`px-3 py-2 rounded-lg border cursor-pointer ${
-                    sexo === s ? "border-[#184054] bg-[#bdcacf]" : "border-gray-200"
+                    sexo === s ? "border-[#1e4050] bg-[#bdcacf]" : "border-gray-200"
                   }`}
                 >
                   <input
@@ -190,7 +190,7 @@ export default function RBGroup() {
                     name="sexo"
                     checked={sexo === s}
                     onChange={() => setSexo(s)}
-                    className="mr-2 accent-[#184054]"
+                    className="mr-2 accent-[#1e4050]"
                   />
                   {s.toUpperCase()}
                 </label>
@@ -209,7 +209,7 @@ export default function RBGroup() {
                 max={maxEdad}
                 value={edad}
                 onChange={(e) => setEdad(Number(e.target.value))}
-                className="flex-1 accent-[#184054]"
+                className="flex-1 accent-[#1e4050]"
               />
               <span className="text-sm text-gray-600 w-6">{maxEdad}</span>
               <div className="w-10 text-right font-medium">{edad}</div>
@@ -227,7 +227,7 @@ export default function RBGroup() {
                 max={maxEdadRetiro}
                 value={edadRetiro}
                 onChange={(e) => setEdadRetiro(Number(e.target.value))}
-                className="flex-1 accent-[#184054]"
+                className="flex-1 accent-[#1e4050]"
               />
               <span className="text-sm text-gray-600 w-6">{maxEdadRetiro}</span>
               <div className="w-10 text-right font-medium">{edadRetiro}</div>
@@ -242,7 +242,7 @@ export default function RBGroup() {
                 <label
                   key={m}
                   className={`px-3 py-2 rounded-lg border cursor-pointer ${
-                    moneda === m ? "border-[#184054] bg-[#bdcacf]" : "border-gray-200"
+                    moneda === m ? "border-[#1e4050] bg-[#bdcacf]" : "border-gray-200"
                   }`}
                 >
                   <input
@@ -250,7 +250,7 @@ export default function RBGroup() {
                     name="moneda"
                     checked={moneda === m}
                     onChange={() => setMoneda(m)}
-                    className="mr-2 accent-[#184054]"
+                    className="mr-2 accent-[#1e4050]"
                   />
                   {m}
                 </label>
@@ -270,9 +270,9 @@ export default function RBGroup() {
               step={moneda === "ARS" ? 5000 : 10}
               value={aporte}
               onChange={(e) => setAporte(Number(e.target.value))}
-              className="w-full accent-[#184054] mt-1"
+              className="w-full accent-[#1e4050] mt-1"
             />
-            <div className="text-right text-medium font-medium text-[#184054]">
+            <div className="text-right text-medium font-medium text-[#1e4050]">
               {moneda} {aporte.toLocaleString()}
             </div>
           </div>
@@ -280,7 +280,7 @@ export default function RBGroup() {
           <div className="text-center mt-4">
             <button
               onClick={handleCalcular}
-              className="inline-block px-6 py-2 rounded-full bg-[#184054] text-white font-semibold hover:brightness-95"
+              className="inline-block px-6 py-2 rounded-full bg-[#1e4050] text-white font-semibold hover:brightness-95"
             >
               Calcular
             </button>
@@ -291,14 +291,14 @@ export default function RBGroup() {
         {resultado && (
           <motion.div ref={resultadoRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 space-y-4">
             <h3 className="text-lg font-semibold text-gray-700">Resultados</h3>
-            <div className="bg-[#184054] p-4 rounded-lg border">
+            <div className="bg-[#1e4050] p-4 rounded-lg border">
               <div className="text-sm text-white">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#ffffff]">
                 {moneda} {Number(resultado.FV_total).toLocaleString()}
               </div>
             </div>
 
-            <div className="bg-[#184054] p-4 rounded-lg border">
+            <div className="bg-[#1e4050] p-4 rounded-lg border">
               <div className="text-sm text-white">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#ffffff]">
                 {moneda} {Number(resultado.rentaMensual).toLocaleString()}
@@ -341,7 +341,7 @@ export default function RBGroup() {
               </div>
 
               <div className="mt-3 flex justify-end">
-                <button type="submit" disabled={sending} className="px-5 py-2 bg-[#184054] text-white rounded-full">
+                <button type="submit" disabled={sending} className="px-5 py-2 bg-[#1e4050] text-white rounded-full">
                   {sending ? "Procesando..." : "Solicitar Cotización"}
                 </button>
               </div>
