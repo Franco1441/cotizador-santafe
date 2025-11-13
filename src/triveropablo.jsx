@@ -273,7 +273,7 @@ export default function triveropablo() {
               className="w-full accent-[#000000] mt-1"
             />
             <div className="text-right text-medium font-medium text-[#000000]">
-              {moneda} {aporte.toLocaleString()}
+              {moneda} {aporte.toLocaleString("es-AR")}
             </div>
           </div>
 

@@ -273,7 +273,7 @@ export default function Campi() {
               className="w-full accent-[#0f3858] mt-1"
             />
             <div className="text-right text-medium font-medium text-[#0f3858]">
-              {moneda} {aporte.toLocaleString()}
+              {moneda} {aporte.toLocaleString("es-AR")}
             </div>
           </div>
 
@@ -294,14 +294,14 @@ export default function Campi() {
             <div className="bg-[#e6dfc4] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#0f3858]">
-                {moneda} {Number(resultado.FV_total).toLocaleString()}
+                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
               </div>
             </div>
 
             <div className="bg-[#e6dfc4] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#0f3858]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString()}
+                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
               </div>
             </div>
 
