@@ -342,7 +342,7 @@ export default function triveropablo() {
 
               <div className="mt-3 flex justify-end">
                 <button type="submit" disabled={sending} className="px-5 py-2 bg-[#000000] text-white rounded-full">
-                  {sending ? "Procesando..." : "Solicitar Cotización"}
+                  {sending ? "Procesando..." : "Descargar Cotización"}
                 </button>
               </div>
             </form>
