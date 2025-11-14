@@ -1,72 +1,89 @@
 export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRetiro }) {
+  // --- Normalización de sexo ---
+  let s = (sexo + "").trim().toLowerCase();
+  if (s === "f" || s === "femenino") s = "F";
+  else s = "M";
+
+  // --- Normalización de moneda ---
+  let m = (moneda + "").trim().toUpperCase() === "USD" ? "USD" : "ARS";
+
+  // --- Límites ---
   const edadMinima = 18;
-  const edadMaximaContratacion = 64; // igual para ambos
-  const edadMaximaRetiro = 80;       // nuevo límite
+  const edadMaximaContratacion = 64;
+  const edadMaximaRetiro = 80;
 
-  // --- Validaciones básicas ---
-  if (!edadRetiro) edadRetiro = edadMaximaRetiro;
-  if (edadActual < edadMinima) edadActual = edadMinima;
-  if (edadActual > edadMaximaContratacion) edadActual = edadMaximaContratacion;
-  if (edadRetiro > edadMaximaRetiro) edadRetiro = edadMaximaRetiro;
-  if (edadRetiro <= edadActual) return { FV_total: 0, rentaMensual: 0, factorRenta: 0 };
+  edadActual = Math.max(edadMinima, Math.min(edadActual, edadMaximaContratacion));
 
-  // --- CÁLCULOS ---
-  const plazoAnios = edadRetiro - edadActual;
-  let tasaAnual;
+  // Edad de retiro por defecto según sexo, igual al Excel:
+  if (!edadRetiro) edadRetiro = (s === "F") ? 60 : 65;
 
-  // Tasas diferenciadas por sexo, moneda y plazo
-  if (moneda === "ARS") {
-    if (sexo === "femenino") {
-      if (plazoAnios > 35) {
-        tasaAnual = 0.1758;
-      } else if (plazoAnios > 15) {
-        tasaAnual = 0.1751;
-      } else {
-        tasaAnual = 0.1602;
-      }
-    } else {
-      if (plazoAnios > 40) {
-        tasaAnual = 0.1770;
-      } else if (plazoAnios > 15) {
-        tasaAnual = 0.17477;
-      } else {
-        tasaAnual = 0.1602;
-      }
-    }
-  } else {
-    tasaAnual = sexo === "femenino" ? 0.0355 : 0.027;
+  edadRetiro = Math.min(edadRetiro, edadMaximaRetiro);
+
+  if (edadRetiro <= edadActual) {
+    return {
+      FV_total: 0,
+      rentaMensual: 0,
+      factorRenta: 0,
+      aporteNeto: 0,
+      primaTarifaMensual: 0,
+      tasaMensual: 0,
+      mesesHastaRetiro: 0,
+      factorFV: 0
+    };
   }
 
+  // --- Parámetros fijos (tomados del Excel) ---
+  const cargosAdministrativos = 0.10; 
+  const tasaAnual_USD = 0.04;
+  const tasaAnual_ARS = 0.18;
+  const divisorPrimaTarifa = 1.006;
+
+  // --- Cálculos principales ---
+  const premio = aporteMensual;
+
+  const primaTarifaMensual = premio / divisorPrimaTarifa;
+  const primaPuraMensual = primaTarifaMensual * (1 - cargosAdministrativos);
+
+  const tasaAnual = m === "USD" ? tasaAnual_USD : tasaAnual_ARS;
   const tasaMensual = Math.pow(1 + tasaAnual, 1 / 12) - 1;
-  const mesesAporte = plazoAnios * 12;
 
-  // --- Valor futuro ---
+  const mesesHastaRetiro = 12 * (edadRetiro - edadActual);
+
   const i = tasaMensual;
-  const n = mesesAporte;
-  const pmt = aporteMensual;
-  const FV_total = pmt * (((1 + i) ** n - 1) / i) * (1 + i);
+  const n = mesesHastaRetiro;
 
-  // --- Factor de renta ajustado según edad de retiro ---
-  let factorRenta;
-  if (moneda === "ARS") {
-    factorRenta = sexo === "femenino"
-      ? 188.96 * (edadRetiro / 60)
-      : 149.78 * (edadRetiro / 65);
+  let factorFV;
+  if (Math.abs(i) < 1e-12) {
+    factorFV = n;
   } else {
-    factorRenta = sexo === "femenino"
-      ? 274.25 * (edadRetiro / 60)
-      : 200.28 * (edadRetiro / 65);
+    factorFV =
+      Math.pow(1 + i, n) *
+      (1 - Math.pow(1 + i, -n)) /
+      (1 - Math.pow(1 + i, -1));
   }
 
-  let rentaMensual = FV_total / factorRenta;
+  const FV_total = factorFV * primaPuraMensual;
 
-  // ✅ Redondear ambos resultados al múltiplo de 5 más cercano
-  const redondear5 = (valor) => Math.round(valor / 5) * 5;
+  // --- Factores de renta del Excel ---
+  const factoresRenta = {
+    "F-USD": 274.012872158694,
+    "F-ARS": 188.958970551237,
+    "M-USD": 200.555902482334,
+    "M-ARS": 149.781885986579
+  };
+
+  const factorRenta = factoresRenta[`${s}-${m}`];
+
+  const rentaMensual = FV_total / factorRenta;
 
   return {
-    FV_total: redondear5(FV_total),
-    rentaMensual: redondear5(rentaMensual),
+    FV_total,
+    rentaMensual,
     factorRenta,
-    plazoAnios,
+    aporteNeto: primaPuraMensual,
+    primaTarifaMensual,
+    tasaMensual,
+    mesesHastaRetiro,
+    factorFV
   };
 }
