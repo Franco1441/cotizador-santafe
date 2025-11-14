@@ -5,6 +5,7 @@ import App from "./App";
 import Campi from "./campi";
 import Rbgroup from "./rbgroup";
 import TriveroPablo from "./triveropablo";
+import Puertonuevo from "./puertonuevo";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/campi" element={<Campi />} />
         <Route path="/rbgroup" element={<Rbgroup />} />
         <Route path="/triveropablo" element={<TriveroPablo />} />
+        <Route path="/puertonuevo" element={<Puertonuevo />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
