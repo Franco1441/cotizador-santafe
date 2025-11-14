@@ -321,14 +321,14 @@ export default function App() {
             <div className="bg-[#F3E5F5] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#b116ab]">
-                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
+                {moneda} {resultado.FV_total}
               </div>
             </div>
 
             <div className="bg-[#F3E5F5] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#b116ab]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
+                {moneda} {resultado.rentaMensual}
               </div>
             </div>
 

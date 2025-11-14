@@ -294,14 +294,14 @@ export default function triveropablo() {
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
+                {moneda} {resultado.FV_total}
               </div>
             </div>
 
             <div className="bg-[#E6E8EA] p-4 rounded-lg border">
               <div className="text-sm text-gray-600">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#000000]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
+                {moneda} {resultado.rentaMensual}
               </div>
             </div>
 

@@ -1,10 +1,18 @@
+function formatNumber(value) {
+  // Convierte 175220.649 → "175.220,64"
+  return value
+    .toFixed(2)                 // 2 decimales
+    .replace(".", ",")          // cambia el punto decimal por coma
+    .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // separador miles en "."
+}
+
 export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRetiro }) {
-  // --- Normalización de sexo ---
+  // --- Normalización sexo ---
   let s = (sexo + "").trim().toLowerCase();
   if (s === "f" || s === "femenino") s = "F";
   else s = "M";
 
-  // --- Normalización de moneda ---
+  // --- Normalización moneda ---
   let m = (moneda + "").trim().toUpperCase() === "USD" ? "USD" : "ARS";
 
   // --- Límites ---
@@ -14,31 +22,22 @@ export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRe
 
   edadActual = Math.max(edadMinima, Math.min(edadActual, edadMaximaContratacion));
 
-  // Edad de retiro por defecto según sexo, igual al Excel:
   if (!edadRetiro) edadRetiro = (s === "F") ? 60 : 65;
-
   edadRetiro = Math.min(edadRetiro, edadMaximaRetiro);
 
   if (edadRetiro <= edadActual) {
     return {
-      FV_total: 0,
-      rentaMensual: 0,
-      factorRenta: 0,
-      aporteNeto: 0,
-      primaTarifaMensual: 0,
-      tasaMensual: 0,
-      mesesHastaRetiro: 0,
-      factorFV: 0
+      FV_total: "0,00",
+      rentaMensual: "0,00"
     };
   }
 
-  // --- Parámetros fijos (tomados del Excel) ---
-  const cargosAdministrativos = 0.10; 
+  // --- Parámetros del Excel ---
+  const cargosAdministrativos = 0.10;
   const tasaAnual_USD = 0.04;
   const tasaAnual_ARS = 0.18;
   const divisorPrimaTarifa = 1.006;
 
-  // --- Cálculos principales ---
   const premio = aporteMensual;
 
   const primaTarifaMensual = premio / divisorPrimaTarifa;
@@ -53,9 +52,8 @@ export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRe
   const n = mesesHastaRetiro;
 
   let factorFV;
-  if (Math.abs(i) < 1e-12) {
-    factorFV = n;
-  } else {
+  if (Math.abs(i) < 1e-12) factorFV = n;
+  else {
     factorFV =
       Math.pow(1 + i, n) *
       (1 - Math.pow(1 + i, -n)) /
@@ -64,7 +62,6 @@ export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRe
 
   const FV_total = factorFV * primaPuraMensual;
 
-  // --- Factores de renta del Excel ---
   const factoresRenta = {
     "F-USD": 274.012872158694,
     "F-ARS": 188.958970551237,
@@ -73,17 +70,15 @@ export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRe
   };
 
   const factorRenta = factoresRenta[`${s}-${m}`];
-
   const rentaMensual = FV_total / factorRenta;
 
+  // --- Devolver formateados ---
   return {
-    FV_total,
-    rentaMensual,
-    factorRenta,
-    aporteNeto: primaPuraMensual,
-    primaTarifaMensual,
-    tasaMensual,
-    mesesHastaRetiro,
-    factorFV
+    FV_total: formatNumber(FV_total),
+    rentaMensual: formatNumber(rentaMensual),
+
+    // Y también devolvemos valores sin formatear por si los necesitás
+    FV_total_raw: FV_total,
+    rentaMensual_raw: rentaMensual,
   };
 }

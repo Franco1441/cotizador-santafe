@@ -294,14 +294,14 @@ export default function puertonuevo() {
             <div className="bg-[#233e62] p-4 rounded-lg border">
               <div className="text-sm text-[#d2d3d5]">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#d2d3d5]">
-                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
+                {moneda} {resultado.FV_total}
               </div>
             </div>
 
             <div className="bg-[#233e62] p-4 rounded-lg border">
               <div className="text-sm text-[#d2d3d5]">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#d2d3d5]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
+                {moneda} {resultado.rentaMensual}
               </div>
             </div>
 

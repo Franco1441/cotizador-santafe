@@ -294,14 +294,14 @@ export default function RBGroup() {
             <div className="bg-[#1e4050] p-4 rounded-lg border">
               <div className="text-sm text-white">Capital al retiro</div>
               <div className="text-2xl font-bold text-[#ffffff]">
-                {moneda} {Number(resultado.FV_total).toLocaleString("es-AR")}
+                {moneda} {resultado.FV_total}
               </div>
             </div>
 
             <div className="bg-[#1e4050] p-4 rounded-lg border">
               <div className="text-sm text-white">Renta mensual proyectada</div>
               <div className="text-2xl font-bold text-[#ffffff]">
-                {moneda} {Number(resultado.rentaMensual).toLocaleString("es-AR")}
+                {moneda} {resultado.rentaMensual}
               </div>
             </div>
 
