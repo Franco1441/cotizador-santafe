@@ -6,6 +6,7 @@ import Campi from "./campi";
 import Rbgroup from "./rbgroup";
 import TriveroPablo from "./triveropablo";
 import Puertonuevo from "./puertonuevo";
+import Fz from "./fz";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/rbgroup" element={<Rbgroup />} />
         <Route path="/triveropablo" element={<TriveroPablo />} />
         <Route path="/puertonuevo" element={<Puertonuevo />} />
+        <Route path="/fz" element={<Fz />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
