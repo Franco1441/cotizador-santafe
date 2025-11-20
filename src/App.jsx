@@ -23,7 +23,7 @@ export default function App() {
   const SECRET_TOKEN = "PrevencionRetiro123";
 
   const minAporte = moneda === "ARS" ? 30000 : 100;
-  const maxAporte = moneda === "ARS" ? 400000 : 400;
+  const maxAporte = moneda === "ARS" ? 1000000 : 500;
   const maxEdad = 64;
   const maxEdadRetiro = 80;
 
