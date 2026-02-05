@@ -6,11 +6,13 @@ import { motion } from "framer-motion";
 
 const trackEvent = (eventName, params = {}) => {
   window.dataLayer = window.dataLayer || [];
+  console.log("GA EVENT:", eventName, params);
   window.dataLayer.push({
     event: eventName,
     ...params,
   });
 };
+
 
 
 export default function App() {
