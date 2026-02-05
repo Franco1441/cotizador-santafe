@@ -4,7 +4,6 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { motion } from "framer-motion";
 
-
 export default function App() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
@@ -48,6 +47,24 @@ export default function App() {
       moneda,
     });
     setResultado(res);
+
+    // 🔔 Evento GA4: simulación realizada
+    // (solo si gtag está disponible)
+    try {
+      if (window && window.gtag) {
+        window.gtag("event", "simulacion_realizada", {
+          moneda,
+          aporte: Number(aporte),
+          edad: Number(edad),
+          edad_retiro: Number(edadRetiro),
+          sexo,
+          FV_total: res?.FV_total ?? null,
+        });
+      }
+    } catch (err) {
+      // no hacemos nada si falla el tracking
+      console.warn("gtag error simulacion_realizada:", err);
+    }
 
     // 👇 Hacer scroll al bloque de resultados
     setTimeout(() => {
@@ -149,6 +166,22 @@ export default function App() {
       }
 
       if (result.ok) {
+        // 🔔 Evento GA4: formulario completado (solo cuando el envío fue OK)
+        try {
+          if (window && window.gtag) {
+            window.gtag("event", "formulario_completado", {
+              moneda,
+              aporte: Number(aporte),
+              edad: Number(edad),
+              edad_retiro: Number(edadRetiro),
+              sexo,
+              FV_total: resultado?.FV_total ?? null,
+            });
+          }
+        } catch (err) {
+          console.warn("gtag error formulario_completado:", err);
+        }
+
         alert("✅ Cotización enviada correctamente por correo y descargada.");
       } else {
         alert("⚠️ El PDF se generó, pero hubo un problema al enviar el correo.");
