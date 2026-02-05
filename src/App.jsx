@@ -25,7 +25,7 @@ export default function App() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
   const [moneda, setMoneda] = useState("ARS");
-  const [aporte, setAporte] = useState(30000);
+  const [aporte, setAporte] = useState(40000);
   const [resultado, setResultado] = useState(null);
   const [sending, setSending] = useState(false);
   const [edadRetiro, setEdadRetiro] = useState(80);
@@ -38,7 +38,7 @@ export default function App() {
     "https://script.google.com/macros/s/AKfycbzgTPlGNgj_gH0A-Opq3nHd_1ELEPCYN3vKt0rTJDec7_df4c0RqndGdINZnry8vzMSiA/exec";
   const SECRET_TOKEN = "PrevencionRetiro123";
 
-  const minAporte = moneda === "ARS" ? 30000 : 100;
+  const minAporte = moneda === "ARS" ? 40000 : 100;
   const maxAporte = moneda === "ARS" ? 1000000 : 500;
   const maxEdad = 64;
   const maxEdadRetiro = 80;
