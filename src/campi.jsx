@@ -4,6 +4,21 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { motion } from "framer-motion";
 
+
+const trackEvent = (eventName, params = {}) => {
+  if (!window.gtag) {
+    console.warn("gtag no está disponible");
+    return;
+  }
+
+  console.log("GA EVENT:", eventName, params);
+
+  window.gtag("event", eventName, {
+    ...params,
+    debug_mode: true, // 🔥 clave para DebugView
+  });
+};
+
 export default function Campi() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
@@ -40,6 +55,17 @@ export default function Campi() {
       moneda,
     });
     setResultado(res);
+
+    // 🔔 Evento GA4: simulación realizada
+    // (solo si gtag está disponible)
+trackEvent("simulacion_realizada", {
+  moneda,
+  sexo,
+  edad,
+  aporte,
+  edad_retiro: edadRetiro,
+  pagina: window.location.pathname
+});
 
     // Scroll automático
     setTimeout(() => {
@@ -132,6 +158,14 @@ export default function Campi() {
       }
 
       if (result.ok) {
+                // 🔔 Evento GA4: formulario completado (solo cuando el envío fue OK)
+trackEvent("formulario_completado", {
+  moneda,
+  sexo,
+  edad,
+  aporte,
+  pagina: window.location.pathname
+});
         alert("✅ Cotización enviada correctamente por correo y descargada.");
       } else {
         alert("⚠️ El PDF se generó, pero hubo un problema al enviar el correo.");
