@@ -4,6 +4,15 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { motion } from "framer-motion";
 
+const trackEvent = (eventName, params = {}) => {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    ...params,
+  });
+};
+
+
 export default function App() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
@@ -50,21 +59,14 @@ export default function App() {
 
     // 🔔 Evento GA4: simulación realizada
     // (solo si gtag está disponible)
-    try {
-      if (window && window.gtag) {
-        window.gtag("event", "simulacion_realizada", {
-          moneda,
-          aporte: Number(aporte),
-          edad: Number(edad),
-          edad_retiro: Number(edadRetiro),
-          sexo,
-          FV_total: res?.FV_total ?? null,
-        });
-      }
-    } catch (err) {
-      // no hacemos nada si falla el tracking
-      console.warn("gtag error simulacion_realizada:", err);
-    }
+trackEvent("simulacion_realizada", {
+  moneda,
+  sexo,
+  edad,
+  aporte,
+  edad_retiro: edadRetiro,
+});
+
 
     // 👇 Hacer scroll al bloque de resultados
     setTimeout(() => {
@@ -167,20 +169,13 @@ export default function App() {
 
       if (result.ok) {
         // 🔔 Evento GA4: formulario completado (solo cuando el envío fue OK)
-        try {
-          if (window && window.gtag) {
-            window.gtag("event", "formulario_completado", {
-              moneda,
-              aporte: Number(aporte),
-              edad: Number(edad),
-              edad_retiro: Number(edadRetiro),
-              sexo,
-              FV_total: resultado?.FV_total ?? null,
-            });
-          }
-        } catch (err) {
-          console.warn("gtag error formulario_completado:", err);
-        }
+trackEvent("formulario_completado", {
+  moneda,
+  sexo,
+  edad,
+  aporte,
+});
+
 
         alert("✅ Cotización enviada correctamente por correo y descargada.");
       } else {
