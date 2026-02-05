@@ -5,13 +5,19 @@ import autoTable from "jspdf-autotable";
 import { motion } from "framer-motion";
 
 const trackEvent = (eventName, params = {}) => {
-  window.dataLayer = window.dataLayer || [];
+  if (!window.gtag) {
+    console.warn("gtag no está disponible");
+    return;
+  }
+
   console.log("GA EVENT:", eventName, params);
-  window.dataLayer.push({
-    event: eventName,
+
+  window.gtag("event", eventName, {
     ...params,
+    debug_mode: true, // 🔥 clave para DebugView
   });
 };
+
 
 
 
