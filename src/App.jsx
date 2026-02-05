@@ -73,6 +73,7 @@ trackEvent("simulacion_realizada", {
   edad,
   aporte,
   edad_retiro: edadRetiro,
+  pagina: window.location.pathname
 });
 
 
@@ -182,6 +183,7 @@ trackEvent("formulario_completado", {
   sexo,
   edad,
   aporte,
+  pagina: window.location.pathname
 });
 
 
