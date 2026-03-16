@@ -19,7 +19,7 @@ const trackEvent = (eventName, params = {}) => {
   });
 };
 
-export default function puertonuevo() {
+export default function CarlosSerovich() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
   const [moneda, setMoneda] = useState("ARS");
@@ -100,14 +100,14 @@ trackEvent("simulacion_realizada", {
 
     try {
       const doc = new jsPDF();
-      const logoBlob = await fetch("/puertonuevo.png").then((res) => res.blob());
+      const logoBlob = await fetch("/Carlos Serovich.png").then((res) => res.blob());
       const logoBase64 = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
         reader.readAsDataURL(logoBlob);
       });
 
-      doc.addImage(logoBase64, "PNG", 90, 8, 28, 27);
+      doc.addImage(logoBase64, "PNG", 80, 12, 52, 29);
       doc.setFontSize(10);
       doc.text(`Fecha de emisión: ${new Date().toLocaleString()}`, 15, 40);
 
@@ -129,7 +129,7 @@ trackEvent("simulacion_realizada", {
           ["Renta mensual proyectada", `${data.moneda} ${data.rentaMensual.toLocaleString()}`],
         ],
         styles: { fontSize: 9, halign: "left" },
-        headStyles: { fillColor: [35, 62, 98] },
+        headStyles: { fillColor: [16, 57, 89] },
       });
 
       doc.setFontSize(8);
@@ -141,7 +141,7 @@ trackEvent("simulacion_realizada", {
       );
       doc.text("© Prevención Retiro — Unidad Santa Fe", 15, doc.lastAutoTable.finalY + 25);
 
-      const pdfBase64 = doc.output("datauristring");
+       const pdfBase64 = doc.output("datauristring");
 
         const response = await fetch("/.netlify/functions/sendEmail", {
         method: "POST",
@@ -186,7 +186,7 @@ trackEvent("formulario_completado", {
     <div className="min-h-screen bg-white text-gray-800 px-4 py-8">
       <div className="max-w-xl mx-auto">
         <header className="mb-6 text-center">
-          <img src="/puertonuevo.png" alt="Puertonuevo" className="mx-auto h-24 mb-3" />
+          <img src="/Carlos Serovich.png" alt="Carlos Serovich" className="mx-auto h-32 mb-1" />
         </header>
 
         <motion.section
@@ -194,7 +194,7 @@ trackEvent("formulario_completado", {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-xl font-semibold text-[#233e62] mb-3">
+          <h2 className="text-xl font-semibold text-[#17396a] mb-3">
             ¿Querés saber cuánto podrías ahorrar con tu seguro?
           </h2>
           <p className="text-sm text-gray-700 mb-4">
@@ -203,7 +203,7 @@ trackEvent("formulario_completado", {
 
           <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 text-sm text-gray-700 mb-5">
             <strong className="text-yellow-800">Atención:</strong>{" "}
-            Los cálculos se realizan considerando una edad de ingreso de hasta 64 años, con posibilidad de simular la edad de retiro hasta los 80.
+             Los cálculos se realizan considerando una edad de ingreso de hasta 64 años, con posibilidad de simular la edad de retiro hasta los 80.
             Las tasas proyectadas son del 4% en dólares y 18% en pesos. No se consideran sellados provinciales.
           </div>
 
@@ -216,7 +216,7 @@ trackEvent("formulario_completado", {
                 <label
                   key={s}
                   className={`px-3 py-2 rounded-lg border cursor-pointer ${
-                    sexo === s ? "border-[#233e62] bg-[#d2d3d5]" : "border-gray-200"
+                    sexo === s ? "border-[#17396a] bg-[#d9e5f7]" : "border-gray-200"
                   }`}
                 >
                   <input
@@ -224,7 +224,7 @@ trackEvent("formulario_completado", {
                     name="sexo"
                     checked={sexo === s}
                     onChange={() => setSexo(s)}
-                    className="mr-2 accent-[#233e62]"
+                    className="mr-2 accent-[#17396a]"
                   />
                   {s.toUpperCase()}
                 </label>
@@ -243,7 +243,7 @@ trackEvent("formulario_completado", {
                 max={maxEdad}
                 value={edad}
                 onChange={(e) => setEdad(Number(e.target.value))}
-                className="flex-1 accent-[#233e62]"
+                className="flex-1 accent-[#17396a]"
               />
               <span className="text-sm text-gray-600 w-6">{maxEdad}</span>
               <div className="w-10 text-right font-medium">{edad}</div>
@@ -261,7 +261,7 @@ trackEvent("formulario_completado", {
                 max={maxEdadRetiro}
                 value={edadRetiro}
                 onChange={(e) => setEdadRetiro(Number(e.target.value))}
-                className="flex-1 accent-[#233e62]"
+                className="flex-1 accent-[#17396a]"
               />
               <span className="text-sm text-gray-600 w-6">{maxEdadRetiro}</span>
               <div className="w-10 text-right font-medium">{edadRetiro}</div>
@@ -276,7 +276,7 @@ trackEvent("formulario_completado", {
                 <label
                   key={m}
                   className={`px-3 py-2 rounded-lg border cursor-pointer ${
-                    moneda === m ? "border-[#233e62] bg-[#d2d3d5]" : "border-gray-200"
+                    moneda === m ? "border-[#17396a] bg-[#d9e5f7]" : "border-gray-200"
                   }`}
                 >
                   <input
@@ -284,7 +284,7 @@ trackEvent("formulario_completado", {
                     name="moneda"
                     checked={moneda === m}
                     onChange={() => setMoneda(m)}
-                    className="mr-2 accent-[#233e62]"
+                    className="mr-2 accent-[#17396a]"
                   />
                   {m}
                 </label>
@@ -304,9 +304,9 @@ trackEvent("formulario_completado", {
               step={moneda === "ARS" ? 5000 : 10}
               value={aporte}
               onChange={(e) => setAporte(Number(e.target.value))}
-              className="w-full accent-[#233e62] mt-1"
+              className="w-full accent-[#17396a] mt-1"
             />
-            <div className="text-right text-medium font-medium text-[#233e62]">
+            <div className="text-right text-medium font-medium text-[#17396a]">
               {moneda} {aporte.toLocaleString("es-AR")}
             </div>
           </div>
@@ -314,7 +314,7 @@ trackEvent("formulario_completado", {
           <div className="text-center mt-4">
             <button
               onClick={handleCalcular}
-              className="inline-block px-6 py-2 rounded-full bg-[#233e62] text-[#d2d3d5] font-semibold hover:brightness-95"
+              className="inline-block px-6 py-2 rounded-full bg-[#17396a] text-white font-semibold hover:brightness-95"
             >
               Calcular
             </button>
@@ -325,16 +325,16 @@ trackEvent("formulario_completado", {
         {resultado && (
           <motion.div ref={resultadoRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 space-y-4">
             <h3 className="text-lg font-semibold text-gray-700">Resultados</h3>
-            <div className="bg-[#233e62] p-4 rounded-lg border">
-              <div className="text-sm text-[#d2d3d5]">Capital al retiro</div>
-              <div className="text-2xl font-bold text-[#d2d3d5]">
+            <div className="bg-[#d9e5f7] p-4 rounded-lg border">
+              <div className="text-sm text-gray-600">Capital al retiro</div>
+              <div className="text-2xl font-bold text-[#17396a]">
                 {moneda} {resultado.FV_total}
               </div>
             </div>
 
-            <div className="bg-[#233e62] p-4 rounded-lg border">
-              <div className="text-sm text-[#d2d3d5]">Renta mensual proyectada</div>
-              <div className="text-2xl font-bold text-[#d2d3d5]">
+            <div className="bg-[#d9e5f7] p-4 rounded-lg border">
+              <div className="text-sm text-gray-600">Renta mensual proyectada</div>
+              <div className="text-2xl font-bold text-[#17396a]">
                 {moneda} {resultado.rentaMensual}
               </div>
             </div>
@@ -375,7 +375,7 @@ trackEvent("formulario_completado", {
               </div>
 
               <div className="mt-3 flex justify-end">
-                <button type="submit" disabled={sending} className="px-5 py-2 bg-[#233e62] text-[#d2d3d5] rounded-full">
+                <button type="submit" disabled={sending} className="px-5 py-2 bg-[#0f3858] text-white rounded-full">
                   {sending ? "Procesando..." : "Descargar Cotización"}
                 </button>
               </div>
