@@ -8,11 +8,13 @@ import TriveroPablo from "./triveropablo";
 import Puertonuevo from "./puertonuevo";
 import Fz from "./fz";
 import CarlosSerovich from "./CarlosSerovich";
+import PuertoNuevoTagManager from "./PuertoNuevoTagManager";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      <PuertoNuevoTagManager />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/campi" element={<Campi />} />
