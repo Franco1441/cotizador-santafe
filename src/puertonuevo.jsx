@@ -333,7 +333,7 @@ export default function puertonuevo() {
             </div>
 
             <form onSubmit={handleEnviar} className="bg-white border rounded-2xl p-4 shadow-sm">
-              <h4 className="font-semibold text-gray-700 mb-3">Descargá tu cotización</h4>
+              <h4 className="font-semibold text-gray-700 mb-3">Habla con un asesor</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">Nombre y Apellido</label>
