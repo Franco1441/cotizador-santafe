@@ -15,7 +15,7 @@ const trackEvent = (eventName, params = {}) => {
 
   window.gtag("event", eventName, {
     ...params,
-    debug_mode: true, // 🔥 clave para DebugView
+    debug_mode: true,
   });
 };
 
@@ -56,18 +56,15 @@ export default function puertonuevo() {
     });
     setResultado(res);
 
-    // 🔔 Evento GA4: simulación realizada
-    // (solo si gtag está disponible)
-trackEvent("simulacion_realizada", {
-  moneda,
-  sexo,
-  edad,
-  aporte,
-  edad_retiro: edadRetiro,
-  pagina: window.location.pathname
-});
+    trackEvent("simulacion_realizada", {
+      moneda,
+      sexo,
+      edad,
+      aporte,
+      edad_retiro: edadRetiro,
+      pagina: window.location.pathname
+    });
 
-    // Scroll automático
     setTimeout(() => {
       resultadoRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 300);
@@ -85,7 +82,6 @@ trackEvent("simulacion_realizada", {
     const formData = new FormData(e.target);
     const data = {
       nombre: formData.get("nombre"),
-      dni: formData.get("dni"),
       fecha_nacimiento: formData.get("fecha_nacimiento"),
       telefono: formData.get("telefono"),
       email: formData.get("email"),
@@ -116,7 +112,6 @@ trackEvent("simulacion_realizada", {
         head: [["Dato", "Valor"]],
         body: [
           ["Nombre", data.nombre],
-          ["DNI", data.dni],
           ["Fecha de nacimiento", data.fecha_nacimiento],
           ["Teléfono", data.telefono],
           ["Email", data.email],
@@ -143,7 +138,7 @@ trackEvent("simulacion_realizada", {
 
       const pdfBase64 = doc.output("datauristring");
 
-        const response = await fetch("/.netlify/functions/sendEmail", {
+      const response = await fetch("/.netlify/functions/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre: data.nombre, email: data.email, pdfBase64 }),
@@ -158,14 +153,13 @@ trackEvent("simulacion_realizada", {
       }
 
       if (result.ok) {
-                // 🔔 Evento GA4: formulario completado (solo cuando el envío fue OK)
-trackEvent("formulario_completado", {
-  moneda,
-  sexo,
-  edad,
-  aporte,
-  pagina: window.location.pathname
-});
+        trackEvent("formulario_completado", {
+          moneda,
+          sexo,
+          edad,
+          aporte,
+          pagina: window.location.pathname
+        });
         alert("✅ Cotización enviada correctamente por correo y descargada.");
       } else {
         alert("⚠️ El PDF se generó, pero hubo un problema al enviar el correo.");
@@ -207,7 +201,6 @@ trackEvent("formulario_completado", {
             Las tasas proyectadas son del 4% en dólares y 18% en pesos. No se consideran sellados provinciales.
           </div>
 
-          {/* FORM PRINCIPAL */}
           {/* Sexo */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">¿Cómo te identificás?</label>
@@ -348,11 +341,6 @@ trackEvent("formulario_completado", {
                 </div>
 
                 <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">DNI</label>
-                  <input name="dni" className="border rounded-md p-2 w-full" required />
-                </div>
-
-                <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
                   <input
                     name="fecha_nacimiento"
@@ -376,7 +364,7 @@ trackEvent("formulario_completado", {
 
               <div className="mt-3 flex justify-end">
                 <button type="submit" disabled={sending} className="px-5 py-2 bg-[#233e62] text-[#d2d3d5] rounded-full">
-                  {sending ? "Procesando..." : "Descargar Cotización"}
+                  {sending ? "Procesando..." : "Hablar con un asesor"}
                 </button>
               </div>
             </form>
