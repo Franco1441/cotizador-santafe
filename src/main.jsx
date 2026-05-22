@@ -7,6 +7,7 @@ import Rbgroup from "./rbgroup";
 import TriveroPablo from "./triveropablo";
 import Puertonuevo from "./puertonuevo";
 import Fz from "./fz";
+import Ferrari from "./Ferrari.jsx";
 import CarlosSerovich from "./CarlosSerovich";
 import PuertoNuevoTagManager from "./PuertoNuevoTagManager";
 import "./index.css";
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/triveropablo" element={<TriveroPablo />} />
         <Route path="/puertonuevo" element={<Puertonuevo />} />
         <Route path="/fz" element={<Fz />} />
+        <Route path="/ferrari-assenza" element={<Ferrari />} />
         <Route path="/carlosserovich" element={<CarlosSerovich />} />
       </Routes>
     </BrowserRouter>
