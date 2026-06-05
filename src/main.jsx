@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Campi from "./campi";
 import Rbgroup from "./rbgroup";
-import Fallabrino from "./fallabrino";
+import Fallabrino from "./Fallabrino";
 import TriveroPablo from "./triveropablo";
 import Puertonuevo from "./puertonuevo";
 import Fz from "./fz";
