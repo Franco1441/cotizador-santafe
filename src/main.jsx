@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import Campi from "./campi";
 import Rbgroup from "./rbgroup";
+import Fallabrino from "./fallabrino";
 import TriveroPablo from "./triveropablo";
 import Puertonuevo from "./puertonuevo";
 import Fz from "./fz";
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/rbgroup" element={<Rbgroup />} />
         <Route path="/triveropablo" element={<TriveroPablo />} />
         <Route path="/puertonuevo" element={<Puertonuevo />} />
+        <Route path="/fallabrino" element={<Fallabrino />} />
         <Route path="/fz" element={<Fz />} />
         <Route path="/ferrari-assenza" element={<Ferrari />} />
         <Route path="/carlosserovich" element={<CarlosSerovich />} />
