@@ -63,6 +63,16 @@ export default function puertonuevo() {
     setResultado(null);
   }, [moneda]);
 
+  useEffect(() => {
+    const pdfUrl = whatsappConfirmation?.pdfUrl;
+
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [whatsappConfirmation?.pdfUrl]);
+
   const handleCalcular = () => {
     const res = calcularRetiro({
       aporteMensual: Number(aporte),
@@ -172,7 +182,8 @@ export default function puertonuevo() {
         console.error("Respuesta no JSON:", text);
       }
 
-      doc.save(`Cotizacion_PrevencionRetiro_${data.nombre}.pdf`);
+      const pdfFileName = `Cotizacion_PrevencionRetiro_${data.nombre}.pdf`;
+      const pdfUrl = URL.createObjectURL(doc.output("blob"));
 
       const emailSent = response.ok && result.ok;
 
@@ -189,7 +200,12 @@ export default function puertonuevo() {
       }
 
       form.reset();
-      setWhatsappConfirmation({ emailSent, url: whatsappUrl });
+      setWhatsappConfirmation({
+        emailSent,
+        pdfFileName,
+        pdfUrl,
+        url: whatsappUrl,
+      });
     } catch (err) {
       console.error("Error al generar o enviar el PDF:", err);
       alert("Ocurrió un error al procesar la solicitud ❌");
@@ -393,14 +409,21 @@ export default function puertonuevo() {
             </h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               {whatsappConfirmation.emailSent
-                ? "El correo se envió correctamente y el PDF ya se descargó."
-                : "El PDF ya se descargó, pero hubo un problema al enviar el correo."}
+                ? "El correo se envió correctamente. Elegí cómo querés continuar."
+                : "Hubo un problema al enviar el correo, pero podés continuar con tu cotización."}
             </p>
             <a
               href={whatsappConfirmation.url}
               className="mt-5 block w-full rounded-full bg-[#25D366] px-5 py-3 font-semibold text-white hover:brightness-95"
             >
               Abrir WhatsApp
+            </a>
+            <a
+              href={whatsappConfirmation.pdfUrl}
+              download={whatsappConfirmation.pdfFileName}
+              className="mt-3 block w-full rounded-full bg-[#233e62] px-5 py-3 font-semibold text-white hover:brightness-95"
+            >
+              Descargar PDF
             </a>
             <button
               type="button"
