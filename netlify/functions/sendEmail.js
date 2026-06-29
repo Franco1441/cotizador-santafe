@@ -11,7 +11,7 @@ export async function handler(event) {
 
   try {
     const data = JSON.parse(event.body);
-    const { nombre, pdfBase64 } = data || {};
+      const { nombre, pdfBase64 } = data || {};
 
     if (!nombre || !pdfBase64) {
       return {
