@@ -10,3 +10,6 @@ dist/
 
 # Local Netlify folder
 .netlify
+
+# macOS metadata files created on external drives
+._*
