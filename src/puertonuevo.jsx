@@ -43,6 +43,7 @@ export default function puertonuevo() {
   const [resultado, setResultado] = useState(null);
   const [sending, setSending] = useState(false);
   const [edadRetiro, setEdadRetiro] = useState(80);
+  const [whatsappConfirmation, setWhatsappConfirmation] = useState(null);
 
   const resultadoRef = useRef(null);
 
@@ -113,6 +114,7 @@ export default function puertonuevo() {
     }
 
     setSending(true);
+    setWhatsappConfirmation(null);
     const whatsappUrl = buildWhatsAppUrl(data);
 
     try {
@@ -172,7 +174,9 @@ export default function puertonuevo() {
 
       doc.save(`Cotizacion_PrevencionRetiro_${data.nombre}.pdf`);
 
-      if (response.ok && result.ok) {
+      const emailSent = response.ok && result.ok;
+
+      if (emailSent) {
         trackEvent("formulario_completado", {
           moneda,
           sexo,
@@ -180,14 +184,12 @@ export default function puertonuevo() {
           aporte,
           pagina: window.location.pathname
         });
-        alert("✅ Cotización enviada correctamente por correo y descargada. Presioná Aceptar para abrir WhatsApp.");
       } else {
-        alert("El PDF se generó, pero hubo un problema al enviar el correo. Vamos a abrir WhatsApp de todos modos.");
         console.error("Error backend:", result);
       }
 
       form.reset();
-      window.location.assign(whatsappUrl);
+      setWhatsappConfirmation({ emailSent, url: whatsappUrl });
     } catch (err) {
       console.error("Error al generar o enviar el PDF:", err);
       alert("Ocurrió un error al procesar la solicitud ❌");
@@ -374,6 +376,42 @@ export default function puertonuevo() {
           © {new Date().getFullYear()} Prevención Retiro — Unidad Santa Fe
         </footer>
       </div>
+
+      {whatsappConfirmation && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#17263a]/60 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="whatsapp-confirmation-title"
+        >
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-2xl text-white">
+              ✓
+            </div>
+            <h3 id="whatsapp-confirmation-title" className="text-xl font-semibold text-[#233e62]">
+              Cotización lista
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              {whatsappConfirmation.emailSent
+                ? "El correo se envió correctamente y el PDF ya se descargó."
+                : "El PDF ya se descargó, pero hubo un problema al enviar el correo."}
+            </p>
+            <a
+              href={whatsappConfirmation.url}
+              className="mt-5 block w-full rounded-full bg-[#25D366] px-5 py-3 font-semibold text-white hover:brightness-95"
+            >
+              Abrir WhatsApp
+            </a>
+            <button
+              type="button"
+              onClick={() => setWhatsappConfirmation(null)}
+              className="mt-3 text-sm font-medium text-gray-500 underline-offset-4 hover:underline"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
