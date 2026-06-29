@@ -23,7 +23,7 @@ const PUERTO_NUEVO_WHATSAPP_NUMBER = "5493433016541";
 
 const buildWhatsAppUrl = (data) => {
   const message = [
-    "Hola, estuve viendo una proyección para mi retiro desde el cotizador de Puerto Nuevo.",
+    "Hola, estuve viendo una proyección para mi retiro desde el cotizador.",
     `Mi nombre es ${data.nombre}.`,
     `Tengo ${data.edad} años y me gustaría retirarme a los ${data.edadRetiro}.`,
     `Aporte mensual: ${data.moneda} ${Number(data.aporte).toLocaleString("es-AR")}.`,
