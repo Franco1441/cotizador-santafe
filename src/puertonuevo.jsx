@@ -88,13 +88,14 @@ export default function puertonuevo() {
 
   const handleEnviar = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
 
     if (!resultado) {
       alert("Primero realizá el cálculo antes de enviar.");
       return;
     }
 
-    const formData = new FormData(e.target);
+    const formData = new FormData(form);
     const data = {
       nombre: formData.get("nombre")?.trim(),
       sexo,
@@ -169,7 +170,9 @@ export default function puertonuevo() {
         console.error("Respuesta no JSON:", text);
       }
 
-      if (result.ok) {
+      doc.save(`Cotizacion_PrevencionRetiro_${data.nombre}.pdf`);
+
+      if (response.ok && result.ok) {
         trackEvent("formulario_completado", {
           moneda,
           sexo,
@@ -177,14 +180,14 @@ export default function puertonuevo() {
           aporte,
           pagina: window.location.pathname
         });
+        alert("✅ Cotización enviada correctamente por correo y descargada. Presioná Aceptar para abrir WhatsApp.");
       } else {
         alert("El PDF se generó, pero hubo un problema al enviar el correo. Vamos a abrir WhatsApp de todos modos.");
         console.error("Error backend:", result);
       }
 
-      doc.save(`Cotizacion_PrevencionRetiro_${data.nombre}.pdf`);
-      e.target.reset();
-      window.location.href = whatsappUrl;
+      form.reset();
+      window.location.assign(whatsappUrl);
     } catch (err) {
       console.error("Error al generar o enviar el PDF:", err);
       alert("Ocurrió un error al procesar la solicitud ❌");
