@@ -11,9 +11,9 @@ export async function handler(event) {
 
   try {
     const data = JSON.parse(event.body);
-    const { nombre, email, pdfBase64 } = data || {};
+    const { nombre, pdfBase64 } = data || {};
 
-    if (!nombre || !email || !pdfBase64) {
+    if (!nombre || !pdfBase64) {
       return {
         statusCode: 400,
         body: JSON.stringify({ ok: false, error: "Missing required fields" }),

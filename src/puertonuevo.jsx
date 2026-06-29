@@ -19,6 +19,22 @@ const trackEvent = (eventName, params = {}) => {
   });
 };
 
+const PUERTO_NUEVO_WHATSAPP_NUMBER = "5493433016541";
+
+const buildWhatsAppUrl = (data) => {
+  const message = [
+    "Hola, estuve viendo una proyección para mi retiro desde el cotizador de Puerto Nuevo.",
+    `Mi nombre es ${data.nombre}.`,
+    `Tengo ${data.edad} años y me gustaría retirarme a los ${data.edadRetiro}.`,
+    `Aporte mensual: ${data.moneda} ${Number(data.aporte).toLocaleString("es-AR")}.`,
+    `Capital estimado al retiro: ${data.moneda} ${data.FV_total}.`,
+    `Renta mensual proyectada: ${data.moneda} ${data.rentaMensual}.`,
+    "Quisiera hablar con un asesor.",
+  ].join("\n");
+
+  return `https://wa.me/${PUERTO_NUEVO_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+};
+
 export default function puertonuevo() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
@@ -78,13 +94,9 @@ export default function puertonuevo() {
       return;
     }
 
-    setSending(true);
     const formData = new FormData(e.target);
     const data = {
-      nombre: formData.get("nombre"),
-      fecha_nacimiento: formData.get("fecha_nacimiento"),
-      telefono: formData.get("telefono"),
-      email: formData.get("email"),
+      nombre: formData.get("nombre")?.trim(),
       sexo,
       edad,
       edadRetiro,
@@ -93,6 +105,14 @@ export default function puertonuevo() {
       FV_total: resultado.FV_total,
       rentaMensual: resultado.rentaMensual,
     };
+
+    if (!data.nombre) {
+      alert("Ingresá tu nombre para continuar.");
+      return;
+    }
+
+    setSending(true);
+    const whatsappUrl = buildWhatsAppUrl(data);
 
     try {
       const doc = new jsPDF();
@@ -112,9 +132,6 @@ export default function puertonuevo() {
         head: [["Dato", "Valor"]],
         body: [
           ["Nombre", data.nombre],
-          ["Fecha de nacimiento", data.fecha_nacimiento],
-          ["Teléfono", data.telefono],
-          ["Email", data.email],
           ["Sexo", data.sexo.toUpperCase()],
           ["Edad actual", data.edad],
           ["Edad de retiro elegida", data.edadRetiro],
@@ -141,7 +158,7 @@ export default function puertonuevo() {
       const response = await fetch("/.netlify/functions/sendEmail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre: data.nombre, email: data.email, pdfBase64 }),
+        body: JSON.stringify({ nombre: data.nombre, pdfBase64 }),
       });
 
       const text = await response.text();
@@ -160,14 +177,14 @@ export default function puertonuevo() {
           aporte,
           pagina: window.location.pathname
         });
-        alert("✅ Cotización enviada correctamente por correo y descargada.");
       } else {
-        alert("⚠️ El PDF se generó, pero hubo un problema al enviar el correo.");
+        alert("El PDF se generó, pero hubo un problema al enviar el correo. Vamos a abrir WhatsApp de todos modos.");
         console.error("Error backend:", result);
       }
 
       doc.save(`Cotizacion_PrevencionRetiro_${data.nombre}.pdf`);
       e.target.reset();
+      window.location.href = whatsappUrl;
     } catch (err) {
       console.error("Error al generar o enviar el PDF:", err);
       alert("Ocurrió un error al procesar la solicitud ❌");
@@ -334,31 +351,10 @@ export default function puertonuevo() {
 
             <form onSubmit={handleEnviar} className="bg-white border rounded-2xl p-4 shadow-sm">
               <h4 className="font-semibold text-gray-700 mb-3">Habla con un asesor</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">Nombre y Apellido</label>
                   <input name="nombre" className="border rounded-md p-2 w-full" required />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
-                  <input
-                    name="fecha_nacimiento"
-                    type="text"
-                    placeholder="Ej: 15/03/1965"
-                    className="border rounded-md p-2 w-full text-gray-700 bg-white"
-                    required
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                  <input name="telefono" className="border rounded-md p-2 w-full" required />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input name="email" type="email" className="border rounded-md p-2 w-full" required />
                 </div>
               </div>
 
