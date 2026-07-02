@@ -25,10 +25,10 @@ export default function App() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
   const [moneda, setMoneda] = useState("ARS");
-  const [aporte, setAporte] = useState(40000);
+  const [aporte, setAporte] = useState(60000);
   const [resultado, setResultado] = useState(null);
   const [sending, setSending] = useState(false);
-  const [edadRetiro, setEdadRetiro] = useState(80);
+  const [edadRetiro, setEdadRetiro] = useState(90);
 
   // 👉 Ref para el scroll automático
   const resultadoRef = useRef(null);
@@ -38,13 +38,24 @@ export default function App() {
     "https://script.google.com/macros/s/AKfycbzgTPlGNgj_gH0A-Opq3nHd_1ELEPCYN3vKt0rTJDec7_df4c0RqndGdINZnry8vzMSiA/exec";
   const SECRET_TOKEN = "PrevencionRetiro123";
 
-  const minAporte = moneda === "ARS" ? 40000 : 100;
+  const minAporte = moneda === "ARS" ? 60000 : 100;
   const maxAporte = moneda === "ARS" ? 1000000 : 500;
-  const maxEdad = 64;
-  const maxEdadRetiro = 80;
+  const maxEdad = 89;
+  const maxEdadRetiro = 90;
+  const minEdadRetiro = Math.min(maxEdadRetiro, Math.max(18, edad + 1));
+
+  const handleEdadChange = (event) => {
+    const nuevaEdad = Number(event.target.value);
+    setEdad(nuevaEdad);
+    setEdadRetiro((edadActualRetiro) =>
+      edadActualRetiro <= nuevaEdad
+        ? Math.min(maxEdadRetiro, nuevaEdad + 1)
+        : edadActualRetiro,
+    );
+  };
 
   useEffect(() => {
-    setEdad(18);
+    setEdad(1);
     setAporte(minAporte);
     setResultado(null);
   }, [sexo]);
@@ -225,7 +236,7 @@ trackEvent("formulario_completado", {
 
           <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 text-sm text-gray-700 mb-5">
             <strong className="text-yellow-800">Atención:</strong>{" "}
-            Los cálculos se realizan considerando una edad de ingreso de hasta 64 años, con posibilidad de simular la edad de retiro hasta los 80.
+            Los cálculos se realizan considerando una edad de ingreso de 1 a 89 años, con posibilidad de simular la edad de retiro de 18 a 90 años.
             Las tasas proyectadas son del 4% en dólares y 18% en pesos. No se consideran sellados provinciales.
           </div>
 
@@ -259,13 +270,13 @@ trackEvent("formulario_completado", {
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">¿Qué edad tenés?</label>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600 w-6">18</span>
+              <span className="text-sm text-gray-600 w-6">1</span>
               <input
                 type="range"
-                min="18"
+                min="1"
                 max={maxEdad}
                 value={edad}
-                onChange={(e) => setEdad(Number(e.target.value))}
+                onChange={handleEdadChange}
                 className="flex-1 accent-[#bd9b5f]"
               />
               <span className="text-sm text-gray-600 w-6">{maxEdad}</span>
@@ -279,10 +290,10 @@ trackEvent("formulario_completado", {
               ¿A qué edad te gustaría retirarte?
             </label>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600 w-6">{edad + 1}</span>
+              <span className="text-sm text-gray-600 w-6">{minEdadRetiro}</span>
               <input
                 type="range"
-                min={edad + 1}
+                min={minEdadRetiro}
                 max={maxEdadRetiro}
                 value={edadRetiro}
                 onChange={(e) => setEdadRetiro(Number(e.target.value))}

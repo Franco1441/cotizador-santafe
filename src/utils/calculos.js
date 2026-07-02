@@ -16,14 +16,15 @@ export function calcularRetiro({ aporteMensual, edadActual, sexo, moneda, edadRe
   let m = (moneda + "").trim().toUpperCase() === "USD" ? "USD" : "ARS";
 
   // --- Límites ---
-  const edadMinima = 18;
-  const edadMaximaContratacion = 64;
-  const edadMaximaRetiro = 80;
+  const edadMinima = 1;
+  const edadMaximaContratacion = 89;
+  const edadMinimaRetiro = 18;
+  const edadMaximaRetiro = 90;
 
   edadActual = Math.max(edadMinima, Math.min(edadActual, edadMaximaContratacion));
 
   if (!edadRetiro) edadRetiro = (s === "F") ? 60 : 65;
-  edadRetiro = Math.min(edadRetiro, edadMaximaRetiro);
+  edadRetiro = Math.max(edadMinimaRetiro, Math.min(edadRetiro, edadMaximaRetiro));
 
   if (edadRetiro <= edadActual) {
     return {
