@@ -35,6 +35,76 @@ const buildWhatsAppUrl = (data) => {
   return `https://wa.me/${PUERTO_NUEVO_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 };
 
+const showWhatsAppLoadingScreen = (whatsappWindow) => {
+  if (!whatsappWindow) return;
+
+  try {
+    whatsappWindow.document.open();
+    whatsappWindow.document.write(`
+      <!doctype html>
+      <html lang="es">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Preparando WhatsApp</title>
+          <style>
+            body {
+              margin: 0;
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: #f7f8fb;
+              color: #233e62;
+              font-family: Arial, sans-serif;
+            }
+            .card {
+              width: min(340px, calc(100% - 32px));
+              padding: 28px 22px;
+              border-radius: 22px;
+              background: #ffffff;
+              text-align: center;
+              box-shadow: 0 18px 45px rgba(23, 38, 58, 0.18);
+            }
+            .spinner {
+              width: 42px;
+              height: 42px;
+              margin: 0 auto 18px;
+              border: 4px solid #d2d3d5;
+              border-top-color: #233e62;
+              border-radius: 999px;
+              animation: spin 0.9s linear infinite;
+            }
+            h1 {
+              margin: 0 0 8px;
+              font-size: 20px;
+            }
+            p {
+              margin: 0;
+              color: #5b6472;
+              line-height: 1.5;
+              font-size: 15px;
+            }
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+        </head>
+        <body>
+          <main class="card">
+            <div class="spinner" aria-hidden="true"></div>
+            <h1>Preparando tu consulta</h1>
+            <p>En unos segundos se abrirá WhatsApp.</p>
+          </main>
+        </body>
+      </html>
+    `);
+    whatsappWindow.document.close();
+  } catch (error) {
+    console.warn("No se pudo mostrar la pantalla de carga de WhatsApp:", error);
+  }
+};
+
 export default function puertonuevo() {
   const [sexo, setSexo] = useState("masculino");
   const [edad, setEdad] = useState(30);
@@ -126,6 +196,7 @@ export default function puertonuevo() {
     setSending(true);
     const whatsappUrl = buildWhatsAppUrl(data);
     const whatsappWindow = window.open("", "_blank");
+    showWhatsAppLoadingScreen(whatsappWindow);
 
     try {
       const doc = new jsPDF();
@@ -184,17 +255,22 @@ export default function puertonuevo() {
 
       const emailSent = response.ok && result.ok;
 
-      if (emailSent) {
-        trackEvent("formulario_completado", {
-          moneda,
-          sexo,
-          edad,
-          aporte,
-          pagina: window.location.pathname
-        });
-      } else {
+      if (!emailSent) {
         console.error("Error backend:", result);
+        if (whatsappWindow && !whatsappWindow.closed) {
+          whatsappWindow.close();
+        }
+        alert("No pudimos enviar la cotización por mail. Probá nuevamente en unos segundos.");
+        return;
       }
+
+      trackEvent("formulario_completado", {
+        moneda,
+        sexo,
+        edad,
+        aporte,
+        pagina: window.location.pathname
+      });
 
       form.reset();
       if (whatsappWindow && !whatsappWindow.closed) {
@@ -392,6 +468,21 @@ export default function puertonuevo() {
         </footer>
       </div>
 
+      {sending && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#17263a]/60 px-4"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#d2d3d5] border-t-[#233e62]" />
+            <h3 className="text-xl font-semibold text-[#233e62]">Enviando cotización</h3>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Estamos preparando tu consulta. En unos segundos se abrirá WhatsApp con el mensaje listo.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
