@@ -43,7 +43,6 @@ export default function puertonuevo() {
   const [resultado, setResultado] = useState(null);
   const [sending, setSending] = useState(false);
   const [edadRetiro, setEdadRetiro] = useState(90);
-  const [whatsappConfirmation, setWhatsappConfirmation] = useState(null);
 
   const resultadoRef = useRef(null);
 
@@ -73,16 +72,6 @@ export default function puertonuevo() {
     setAporte(minAporte);
     setResultado(null);
   }, [moneda]);
-
-  useEffect(() => {
-    const pdfUrl = whatsappConfirmation?.pdfUrl;
-
-    return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
-    };
-  }, [whatsappConfirmation?.pdfUrl]);
 
   const handleCalcular = () => {
     const res = calcularRetiro({
@@ -135,8 +124,8 @@ export default function puertonuevo() {
     }
 
     setSending(true);
-    setWhatsappConfirmation(null);
     const whatsappUrl = buildWhatsAppUrl(data);
+    const whatsappWindow = window.open("", "_blank");
 
     try {
       const doc = new jsPDF();
@@ -193,9 +182,6 @@ export default function puertonuevo() {
         console.error("Respuesta no JSON:", text);
       }
 
-      const pdfFileName = `Cotizacion_PrevencionRetiro_${data.nombre}.pdf`;
-      const pdfUrl = URL.createObjectURL(doc.output("blob"));
-
       const emailSent = response.ok && result.ok;
 
       if (emailSent) {
@@ -211,14 +197,16 @@ export default function puertonuevo() {
       }
 
       form.reset();
-      setWhatsappConfirmation({
-        emailSent,
-        pdfFileName,
-        pdfUrl,
-        url: whatsappUrl,
-      });
+      if (whatsappWindow && !whatsappWindow.closed) {
+        whatsappWindow.location.href = whatsappUrl;
+      } else {
+        window.location.href = whatsappUrl;
+      }
     } catch (err) {
       console.error("Error al generar o enviar el PDF:", err);
+      if (whatsappWindow && !whatsappWindow.closed) {
+        whatsappWindow.close();
+      }
       alert("Ocurrió un error al procesar la solicitud ❌");
     } finally {
       setSending(false);
@@ -392,7 +380,7 @@ export default function puertonuevo() {
 
               <div className="mt-3 flex justify-end">
                 <button type="submit" disabled={sending} className="px-5 py-2 bg-[#233e62] text-[#d2d3d5] rounded-full">
-                  {sending ? "Procesando..." : "Hablar con un asesor"}
+                  {sending ? "Abriendo WhatsApp..." : "Hablar con un asesor"}
                 </button>
               </div>
             </form>
@@ -404,48 +392,6 @@ export default function puertonuevo() {
         </footer>
       </div>
 
-      {whatsappConfirmation && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#17263a]/60 px-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="whatsapp-confirmation-title"
-        >
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-2xl text-white">
-              ✓
-            </div>
-            <h3 id="whatsapp-confirmation-title" className="text-xl font-semibold text-[#233e62]">
-              Cotización lista
-            </h3>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
-              {whatsappConfirmation.emailSent
-                ? "El correo se envió correctamente. Elegí cómo querés continuar."
-                : "Hubo un problema al enviar el correo, pero podés continuar con tu cotización."}
-            </p>
-            <a
-              href={whatsappConfirmation.url}
-              className="mt-5 block w-full rounded-full bg-[#25D366] px-5 py-3 font-semibold text-white hover:brightness-95"
-            >
-              Abrir WhatsApp
-            </a>
-            <a
-              href={whatsappConfirmation.pdfUrl}
-              download={whatsappConfirmation.pdfFileName}
-              className="mt-3 block w-full rounded-full bg-[#233e62] px-5 py-3 font-semibold text-white hover:brightness-95"
-            >
-              Descargar PDF
-            </a>
-            <button
-              type="button"
-              onClick={() => setWhatsappConfirmation(null)}
-              className="mt-3 text-sm font-medium text-gray-500 underline-offset-4 hover:underline"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
