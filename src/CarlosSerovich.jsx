@@ -96,7 +96,6 @@ trackEvent("simulacion_realizada", {
     const formData = new FormData(e.target);
     const data = {
       nombre: formData.get("nombre"),
-      dni: formData.get("dni"),
       fecha_nacimiento: formData.get("fecha_nacimiento"),
       telefono: formData.get("telefono"),
       email: formData.get("email"),
@@ -127,7 +126,6 @@ trackEvent("simulacion_realizada", {
         head: [["Dato", "Valor"]],
         body: [
           ["Nombre", data.nombre],
-          ["DNI", data.dni],
           ["Fecha de nacimiento", data.fecha_nacimiento],
           ["Teléfono", data.telefono],
           ["Email", data.email],
@@ -357,12 +355,6 @@ trackEvent("formulario_completado", {
                   <label className="text-sm font-medium text-gray-700 mb-1">Nombre y Apellido</label>
                   <input name="nombre" className="border rounded-md p-2 w-full" required />
                 </div>
-
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700 mb-1">DNI</label>
-                  <input name="dni" className="border rounded-md p-2 w-full" required />
-                </div>
-
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-700 mb-1">Fecha de nacimiento</label>
                   <input
